@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        #box .water {
+            padding: 5px;
+            border: 1px solid #ccc;
+            float: left;
+        }
+    </style>
+</head>
+<body>
+<div id="box">
+    <div class="water"><img src="images/P_001.jpg" alt=""></div>
+    <div class="water"><img src="images/P_002.jpg" alt=""></div>
+    <div class="water"><img src="images/P_003.jpg" alt=""></div>
+    <div class="water"><img src="images/P_004.jpg" alt=""></div>
+    <div class="water"><img src="images/P_005.jpg" alt=""></div>
+    <div class="water"><img src="images/P_006.jpg" alt=""></div>
+    <div class="water"><img src="images/P_007.jpg" alt=""></div>
+    <div class="water"><img src="images/P_008.jpg" alt=""></div>
+    <div class="water"><img src="images/P_009.jpg" alt=""></div>
+    <div class="water"><img src="images/P_010.jpg" alt=""></div>
+    <div class="water"><img src="images/P_011.jpg" alt=""></div>
+    <div class="water"><img src="images/P_012.jpg" alt=""></div>
+    <div class="water"><img src="images/P_013.jpg" alt=""></div>
+    <div class="water"><img src="images/P_014.jpg" alt=""></div>
+    <div class="water"><img src="images/P_015.jpg" alt=""></div>
+    <div class="water"><img src="images/P_016.jpg" alt=""></div>
+    <div class="water"><img src="images/P_017.jpg" alt=""></div>
+    <div class="water"><img src="images/P_018.jpg" alt=""></div>
+    <div class="water"><img src="images/P_019.jpg" alt=""></div>
+    <div class="water"><img src="images/P_020.jpg" alt=""></div>
+</div>
+
+<script>
+    window.onload = function () {
+        //1. 找对象
+        var box = document.getElementById("box");
+        var waters = box.children;
+
+        //2. 确定一行有多少列
+        // 可视区的宽度/图片盒子的宽度 = 能摆放的列
+        var pageWidth = client().width;
+        var boxWidth = waters[0].offsetWidth;
+        console.log(pageWidth + "  " + boxWidth);
+        var columns = Math.floor(pageWidth/boxWidth);
+        console.log(columns);
+
+
+        assign();
+        function assign() {
+            //3. 确定最小列
+            var arr = [];
+            for(var i =0; i < columns; i++) {
+                //把这些盒子的高度放到一个数组里面去
+                arr.push(waters[i].offsetHeight);
+            }
+            //console.log(arr);
+            //确定最小列
+            //console.log(getMin(arr));
+
+            //4. 添加到最小列
+            for(var i = columns; i < waters.length;i++) {
+                var index = getMin(arr).index;
+                var value = getMin(arr).value;
+                //后面的盒子都要通过定位来摆放
+                var div = waters[i];
+                div.style.position = "absolute";
+                //left和最小列的offsetLeft是一样的
+                div.style.left = waters[index].offsetLeft + "px";
+                div.style.top = value + "px";
+
+                //图片加进来之后，最小列的高度已经变化了，需要改变最小列的高度
+                arr[index] = value + div.offsetHeight;
+            }
+
+        }
+
+        //5. 判断触底，
+        window.onscroll = function () {
+            // 页面被卷去的高度+ 可视区的高度  > 最后一张图片的offsetTop
+            var scrollTop = scroll().scrollTop;
+            var pageHeight = client().height;
+            var lastTop = waters[waters.length - 1].offsetTop;
+            //console.log(scrollTop + " 11 " + pageHeight + " 22 "+ lastTop);
+            if(scrollTop + pageHeight > lastTop) {
+                //console.log("到底了，赶紧加载图片把");
+
+                //8. 需要去后台获取数据，然后加载上来
+                var datas = [
+                    {"src":"images/P_001.jpg"},
+                    {"src":"images/P_002.jpg"},
+                    {"src":"images/P_003.jpg"},
+                    {"src":"images/P_004.jpg"},
+                    {"src":"images/P_005.jpg"},
+                    {"src":"images/P_006.jpg"},
+                    {"src":"images/P_007.jpg"},
+                    {"src":"images/P_008.jpg"},
+                    {"src":"images/P_009.jpg"},
+                    {"src":"images/P_010.jpg"},
+                    {"src":"images/P_011.jpg"},
+                    {"src":"images/P_012.jpg"},
+                    {"src":"images/P_013.jpg"},
+                    {"src":"images/P_014.jpg"},
+                    {"src":"images/P_015.jpg"},
+                    {"src":"images/P_016.jpg"},
+                    {"src":"images/P_017.jpg"},
+                    {"src":"images/P_018.jpg"},
+                    {"src":"images/P_019.jpg"},
+                    {"src":"images/P_020.jpg"}
+                ];
+                for(var i = 0; i < datas.length;i++) {
+                    var div = document.createElement("div");
+                    div.className = "water";
+                    div.innerHTML = '<img src="'+datas[i].src+'" alt="">';
+                    box.appendChild(div);
+                }
+
+                //重新分配位置
+                assign();
+
+
+
+            }
+        }
+
+    }
+
+
+
+
+
+
+
+
+    function getMin(arr) {
+        var minValue = arr[0];
+        var minIndex = 0;
+        for (var i = 0; i < arr.length; i++) {
+            if (minValue > arr[i]) {
+                minValue = arr[i];
+                minIndex = i;
+            }
+        }
+
+        return {
+            index: minIndex,
+            value: minValue
+        };
+
+    }
+    function client() {
+
+        return {
+            width:window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth || 0,
+            height:window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight || 0
+        }
+    }
+
+    function scroll() {
+        return {
+            scrollTop: window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0,
+            scrollLeft: window.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft || 0
+        };
+    }
+
+</script>
+
+</body>
+</html>

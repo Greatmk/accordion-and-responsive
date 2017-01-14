@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        div {
+            width: 400px;
+            height: 400px;
+            background-color: cornflowerblue;
+        }
+    </style>
+</head>
+<body>
+<input type="button" value="显示" id="btn1">
+<input type="button" value="隐藏" id="btn2">
+<div id="box"></div>
+<script src="animate.js"></script>
+<script>
+
+
+    var btn1 = document.getElementById("btn1");
+    var btn2 = document.getElementById("btn2");
+    var box = document.getElementById("box");
+    btn1.onclick = function () {
+        //animate(box, {"opacity": 1});
+        animate(box,{
+            'width': 200,
+            'height': 200
+        },function(){
+            animate(box,{'left':500},function(){
+                animate(box,{
+                    'top': 500,
+                    'width': 500
+                });
+            });
+        });
+    }
+
+    btn2.onclick = function () {
+        animate(box, {"opacity": 0});
+    }
+  
+</script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        ul{
+            list-style: none;
+        }
+        #box{
+            width: 1200px;
+            height: 400px;
+            border: 2px solid #000;
+            margin: 100px auto;
+            position: relative;
+            overflow: hidden;
+        }
+        #box li{
+            width: 1200px;
+            height: 400px;
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+<div id="box">
+    <ul>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+</div>
+
+<script src="animate.js"></script>
+<script>
+    var box = document.getElementById('box');
+    var ul = box.children[0];
+    var lis = ul.children;
+    for(var i=0; i<lis.length; i++){
+        var li = lis[i];
+        li.index = i;
+        li.style.backgroundImage = 'url(images/' + (i+1) + '.jpg)';
+        li.style.left = 240*i + 'px';
+
+         // 给li注册鼠标经过事件
+        //对于下标小于或者等于index的那些li：  100*i
+        //对于小于大于index的那些li：   100*i + 700
+        li.onmouseover = function(){
+            var idx = this.index;
+            for(var i=0; i<lis.length; i++){
+               if(i<=idx){
+                  animate(lis[i],{'left':100*i});
+               }else{
+                   animate(lis[i],{'left':100*i + 700});
+               }
+            }
+        }
+        li.onmouseout = function(){
+           for(var i=0; i<lis.length; i++){
+             animate(lis[i],{'left':240*i});
+           }
+        }
+
+    }
+</script>
+
+</body>
+</html>

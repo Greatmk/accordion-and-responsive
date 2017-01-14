@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    //当我们的页面宽度 大于 960 像素的时候 页面为红色并显示computer
+    //当我们的页面宽度 大于 640 小于 960 页面为绿色并显示tablet
+    //剩下的页面为蓝色并显示mobile
+
+    function client() {
+
+        return {
+            width:window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth || 0,
+            height:window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight || 0
+        }
+    }
+
+
+    responsive();
+    function responsive() {
+        var pageWidth = client().width;
+        if(pageWidth>960) {
+            document.body.style.backgroundColor = "hotpink";
+            document.body.innerHTML = "<h1>computer</h1>"
+        }else if(pageWidth > 640) {
+            document.body.style.backgroundColor = "yellowgreen";
+            document.body.innerHTML = "<h1>tablet</h1>"
+        }else {
+            document.body.style.backgroundColor = "skyblue";
+            document.body.innerHTML = "<h1>mobile</h1>"
+        }
+    }
+    window.onresize = function () {
+        responsive();
+    }
+</script>
+</body>
+</html>
